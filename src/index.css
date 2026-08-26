@@ -46,7 +46,7 @@
     font-family: var(--font-body);
     font-size: 1.125rem;
     line-height: 1.6;
-    overflow-x: clip;
+    overflow-x: hidden;
     cursor: none;
   }
 
@@ -236,14 +236,6 @@
   animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slide-down {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-slide-down {
-  animation: slide-down 0.2s ease-out forwards;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -261,17 +253,3 @@ body.reduced-motion * {
   animation: none !important;
   transition: none !important;
 }
-
-/* Nightfall game interface */
-.noise { position: fixed; inset: 0; pointer-events: none; opacity: .055; z-index: 20; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E"); }
-.briefing { background: radial-gradient(circle at 70% 45%, rgba(130, 62, 30, .26), transparent 26%), linear-gradient(115deg, #080b12 35%, #16110d); }
-.city-map { background-color: #101722; background-image: linear-gradient(28deg, transparent 48%, rgba(214,171,94,.13) 49%, transparent 50%), linear-gradient(120deg, transparent 48%, rgba(142,169,181,.1) 49%, transparent 50%), radial-gradient(circle at 25% 20%, rgba(62,120,148,.32) 0 2px, transparent 3px), radial-gradient(circle at 73% 56%, rgba(210,151,65,.3) 0 2px, transparent 3px); background-size: 94px 94px, 137px 137px, 30px 30px, 42px 42px; filter: saturate(.75); }
-.map-pin { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 8px; text-align: right; transition: transform .2s; }
-.map-pin:hover, .map-pin.active { transform: translate(-50%, -50%) scale(1.07); z-index: 2; }
-.pin-dot { display: grid; place-items: center; width: 38px; height: 38px; color: #f2ce89; border: 1px solid rgba(229,183,101,.6); border-radius: 50%; background: #101722; box-shadow: 0 0 0 7px rgba(229,183,101,.07), 0 0 25px rgba(226,152,58,.25); }
-.pin-dot.found { color: #101722; background: #d49b47; }
-.pin-label { min-width: 94px; padding: 7px 9px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; background: rgba(9,12,18,.83); box-shadow: 0 9px 20px rgba(0,0,0,.2); }
-.pin-label b, .pin-label small { display: block; white-space: nowrap; }.pin-label b { font-size: 11px; }.pin-label small { margin-top: 2px; font-size: 9px; color: #8891a0; }
-.evidence-card { border: 1px solid rgba(229,183,101,.18); border-radius: 6px; padding: 12px; background: linear-gradient(135deg, rgba(229,183,101,.08), transparent); }.evidence-card h3 { margin-top: 8px; font-size: 12px; font-weight: 700; }.evidence-card p { margin-top: 5px; font-size: 11px; line-height: 1.75; color: #929ba9; }
-.suspect { display: flex; width: 100%; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.07); border-radius: 6px; padding: 9px; text-align: right; background: rgba(255,255,255,.018); transition: .2s; }.suspect:hover,.suspect.selected { border-color: rgba(229,183,101,.45); background: rgba(229,183,101,.07); }.suspect b,.suspect small { display:block; }.suspect b { font-size: 12px; }.suspect small { margin-top:2px; font-size:10px; color:#7e8795; }.avatar { display:grid; width:28px; height:28px; place-items:center; border-radius:50%; font-size:12px; color:white; }
-.ask { display:flex; align-items:center; justify-content:center; gap:5px; border:1px solid rgba(229,183,101,.25); border-radius:4px; padding:8px 4px; font-size:10px; color:#d9b978; transition:.2s; }.ask:hover { background: rgba(229,183,101,.12); border-color: rgba(229,183,101,.65); }

@@ -12,9 +12,10 @@ export default function Hero({ reducedMotion }) {
     if (!el || reducedMotion) return;
     function onScroll() {
       const scrollY = window.scrollY;
-      const pct = Math.min(scrollY / window.innerHeight, 1);
-      el.style.transform = `translateY(${-scrollY * 0.15}px) scale(${1 - pct * 0.05})`;
-      el.style.opacity = String(Math.max(0, 1 - pct / 0.7));
+      if (scrollY < window.innerHeight) {
+        el.style.transform = `translateZ(${scrollY * 0.3}px) scale(${1 - scrollY * 0.0005})`;
+        el.style.opacity = String(Math.max(0, 1 - scrollY / (window.innerHeight * 0.7)));
+      }
     }
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -47,9 +48,9 @@ export default function Hero({ reducedMotion }) {
         <h1 className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-gradient-cobalt text-glow leading-none mb-4">
           {name1}
         </h1>
-        <p className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-[hsl(var(--foreground))] leading-none mb-2">
+        <h1 className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-[hsl(var(--foreground))] leading-none mb-2">
           {name2}
-        </p>
+        </h1>
 
         <p className="font-body text-base sm:text-lg text-[hsl(var(--muted-foreground))] mt-6 max-w-xl mx-auto">
           {t.hero.tagline}

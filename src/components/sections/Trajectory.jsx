@@ -18,7 +18,7 @@ function AnimatedProgress({ value, className }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.7 },
+      { threshold: 0.7 }
     );
 
     observer.observe(track);
@@ -43,23 +43,22 @@ export default function Trajectory() {
 
   const currentGrid = [
     { icon: Network, label: t.trajectory.currentGrid ? t.trajectory.currentGrid.routing : 'Routing & Switching' },
-    { icon: Cpu,     label: t.trajectory.currentGrid ? t.trajectory.currentGrid.infra   : 'Infrastructure' },
-    { icon: Server,  label: t.trajectory.currentGrid ? t.trajectory.currentGrid.server  : 'Server Administration' },
-    { icon: Shield,  label: t.trajectory.currentGrid ? t.trajectory.currentGrid.defense : 'Network Defense' },
+    { icon: Cpu, label: t.trajectory.currentGrid ? t.trajectory.currentGrid.infra : 'Infrastructure' },
+    { icon: Server, label: t.trajectory.currentGrid ? t.trajectory.currentGrid.server : 'Server Administration' },
+    { icon: Shield, label: t.trajectory.currentGrid ? t.trajectory.currentGrid.defense : 'Network Defense' },
   ];
-
   const futureGrid = [
-    { icon: Lock,   label: t.trajectory.futureGrid ? t.trajectory.futureGrid.pentest  : 'Penetration Testing' },
-    { icon: Shield, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.threat   : 'Threat Analysis' },
-    { icon: Server, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.secArch  : 'Sec Architecture' },
-    { icon: Cpu,    label: t.trajectory.futureGrid ? t.trajectory.futureGrid.incident : 'Incident Response' },
+    { icon: Lock, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.pentest : 'Penetration Testing' },
+    { icon: Shield, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.threat : 'Threat Analysis' },
+    { icon: Server, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.secArch : 'Sec Architecture' },
+    { icon: Cpu, label: t.trajectory.futureGrid ? t.trajectory.futureGrid.incident : 'Incident Response' },
   ];
 
   const timeline = [
-    { year: lang === 'fa' ? '۲۰۰۷' : '2007', event: lang === 'fa' ? 'تولد'               : 'BORN',                 done: true  },
-    { year: lang === 'fa' ? 'اکنون' : 'NOW',  event: lang === 'fa' ? 'مهندسی شبکه'        : 'NETWORK_ENGINEERING',  done: true  },
-    { year: lang === 'fa' ? 'بعدی'  : 'NEXT', event: lang === 'fa' ? 'تحصیل امنیت سایبری' : 'CYBERSECURITY_STUDIES', done: false },
-    { year: lang === 'fa' ? 'آینده' : 'FUTURE',event: lang === 'fa' ? 'معمار امنیت'        : 'SECURITY_ARCHITECT',   done: false },
+    { year: lang === 'fa' ? '۲۰۰۷' : '2007', event: lang === 'fa' ? 'تولد' : 'BORN', done: true },
+    { year: lang === 'fa' ? 'اکنون' : 'NOW', event: lang === 'fa' ? 'مهندسی شبکه' : 'NETWORK_ENGINEERING', done: true },
+    { year: lang === 'fa' ? 'بعدی' : 'NEXT', event: lang === 'fa' ? 'تحصیل امنیت سایبری' : 'CYBERSECURITY_STUDIES', done: false },
+    { year: lang === 'fa' ? 'آینده' : 'FUTURE', event: lang === 'fa' ? 'معمار امنیت' : 'SECURITY_ARCHITECT', done: false },
   ];
 
   return (
@@ -94,6 +93,7 @@ export default function Trajectory() {
           {/* Current: Networking */}
           <div className="glass rounded-2xl p-8 relative overflow-hidden scanline">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[hsl(var(--primary)/0.1)] rounded-full blur-3xl" />
+
             <div className="relative">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-[hsl(var(--primary)/0.1)] flex items-center justify-center">
@@ -110,10 +110,10 @@ export default function Trajectory() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
-                {currentGrid.map((item) => {
+                {currentGrid.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--secondary)/0.5)] border border-[hsl(var(--border)/0.4)]">
+                    <div key={i} className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--secondary)/0.5)] border border-[hsl(var(--border)/0.4)]">
                       <Icon className="w-4 h-4 text-[hsl(var(--primary))] flex-shrink-0" />
                       <span className="text-xs text-[hsl(var(--foreground))]">{item.label}</span>
                     </div>
@@ -141,6 +141,7 @@ export default function Trajectory() {
           {/* Future: Cybersecurity */}
           <div className="glass rounded-2xl p-8 relative overflow-hidden scanline border-[hsl(var(--accent)/0.2)]">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[hsl(var(--accent)/0.1)] rounded-full blur-3xl" />
+
             <div className="relative">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-[hsl(var(--accent)/0.1)] flex items-center justify-center">
@@ -157,10 +158,10 @@ export default function Trajectory() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
-                {futureGrid.map((item) => {
+                {futureGrid.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--secondary)/0.5)] border border-[hsl(var(--border)/0.4)]">
+                    <div key={i} className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--secondary)/0.5)] border border-[hsl(var(--border)/0.4)]">
                       <Icon className="w-4 h-4 text-[hsl(var(--accent))] flex-shrink-0" />
                       <span className="text-xs text-[hsl(var(--foreground))]">{item.label}</span>
                     </div>
@@ -186,21 +187,11 @@ export default function Trajectory() {
           </div>
         </ScrollReveal>
 
-        {/* Timeline */}
         <ScrollReveal className="mt-12 glass rounded-xl p-6" delay={300}>
-          <div className="relative flex items-start justify-between flex-wrap gap-4">
-            {/* Connecting gradient line */}
-            <div className="absolute top-[5px] left-0 right-0 h-px bg-gradient-to-r from-[hsl(var(--primary)/0.5)] via-[hsl(var(--accent)/0.4)] to-[hsl(var(--accent)/0.15)] hidden sm:block pointer-events-none" />
-
-            {timeline.map((stop) => (
-              <div key={stop.event} className="relative flex items-center gap-3 flex-1 min-w-[130px]">
-                <div
-                  className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                    stop.done
-                      ? 'bg-[hsl(var(--primary))] ring-2 ring-[hsl(var(--primary)/0.3)]'
-                      : 'border-2 border-[hsl(var(--accent))]'
-                  }`}
-                />
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            {timeline.map((stop, i) => (
+              <div key={i} className="flex items-center gap-3 flex-1 min-w-[140px]">
+                <div className={`w-3 h-3 rounded-full ${stop.done ? 'bg-[hsl(var(--primary))]' : 'border-2 border-[hsl(var(--accent))]'} flex-shrink-0`} />
                 <div>
                   <div className={`font-heading text-sm font-bold ${stop.done ? 'text-[hsl(var(--primary))]' : 'text-[hsl(var(--accent))]'}`}>
                     {stop.year}

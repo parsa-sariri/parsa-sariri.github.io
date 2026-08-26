@@ -4,39 +4,23 @@ import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Navbar({ reducedMotion, onToggleMotion }) {
   const { t, lang, toggleLang } = useLanguage();
-  const [scrolled,      setScrolled]      = useState(false);
-  const [menuOpen,      setMenuOpen]      = useState(false);
-  const [activeSection, setActiveSection] = useState('nexus');
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: t.nav.nexus,      href: '#nexus'      },
-    { label: t.nav.about,      href: '#about'      },
-    { label: t.nav.stack,      href: '#stack'      },
+    { label: t.nav.nexus, href: '#nexus' },
+    { label: t.nav.about, href: '#about' },
+    { label: t.nav.stack, href: '#stack' },
     { label: t.nav.trajectory, href: '#trajectory' },
-    { label: t.nav.connect,    href: '#connect'    },
+    { label: t.nav.connect, href: '#connect' },
   ];
 
-  /* ── Scroll → glass effect ─────────────────────────────────────── */
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 40); }
+    function onScroll() {
+      setScrolled(window.scrollY > 40);
+    }
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  /* ── Active section detection ──────────────────────────────────── */
-  useEffect(() => {
-    const ids = ['nexus', 'about', 'stack', 'trajectory', 'connect'];
-    const observers = ids.map((id) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-        { threshold: 0.3 },
-      );
-      obs.observe(el);
-      return obs;
-    });
-    return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
   return (
@@ -58,29 +42,17 @@ export default function Navbar({ reducedMotion, onToggleMotion }) {
           </span>
         </a>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => {
-            const isActive = link.href === `#${activeSection}`;
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`px-4 py-2 text-xs font-heading font-semibold tracking-widest transition-colors relative group ${
-                  isActive
-                    ? 'text-[hsl(var(--primary))]'
-                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-[hsl(var(--primary))] transition-all duration-300 ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
-                />
-              </a>
-            );
-          })}
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="px-4 py-2 text-xs font-heading font-semibold tracking-widest text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors relative group"
+            >
+              {link.label}
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-[hsl(var(--primary))] group-hover:w-full transition-all duration-300" />
+            </a>
+          ))}
           <button
             onClick={toggleLang}
             className="ml-2 flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-heading font-semibold tracking-widest border border-[hsl(var(--border))] rounded-md text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
@@ -98,7 +70,6 @@ export default function Navbar({ reducedMotion, onToggleMotion }) {
           </button>
         </div>
 
-        {/* Hamburger */}
         <button
           className="md:hidden text-[hsl(var(--foreground))]"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -108,19 +79,14 @@ export default function Navbar({ reducedMotion, onToggleMotion }) {
         </button>
       </div>
 
-      {/* Mobile menu — animate-slide-down defined in index.css */}
       {menuOpen && (
-        <div className="md:hidden glass-strong mt-3 mx-4 rounded-xl p-4 flex flex-col gap-2 animate-slide-down">
+        <div className="md:hidden glass-strong mt-3 mx-4 rounded-xl p-4 flex flex-col gap-2">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`px-4 py-3 text-sm font-heading font-semibold tracking-widest transition-colors ${
-                link.href === `#${activeSection}`
-                  ? 'text-[hsl(var(--primary))]'
-                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
-              }`}
+              className="px-4 py-3 text-sm font-heading font-semibold tracking-widest text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
             >
               {link.label}
             </a>
@@ -135,7 +101,10 @@ export default function Navbar({ reducedMotion, onToggleMotion }) {
             </button>
             <span className="text-[hsl(var(--border))]">|</span>
             <button
-              onClick={() => { onToggleMotion(); setMenuOpen(false); }}
+              onClick={() => {
+                onToggleMotion();
+                setMenuOpen(false);
+              }}
               className="text-xs font-heading font-semibold tracking-widest text-[hsl(var(--accent))]"
             >
               {reducedMotion ? t.nav.motionOff : t.nav.motionOn}
