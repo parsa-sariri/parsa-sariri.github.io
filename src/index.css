@@ -49,14 +49,6 @@
     overflow-x: clip;
   }
 
-  /* Custom cursor only on fine pointers inside Landing page */
-  @media (pointer: fine) {
-    .landing-scope,
-    .landing-scope * {
-      cursor: none !important;
-    }
-  }
-
   html[lang="fa"] body,
   html[lang="fa"] .font-heading,
   html[lang="fa"] .font-display,

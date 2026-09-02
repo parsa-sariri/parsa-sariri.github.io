@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import CustomCursor from '@/components/CustomCursor';
 import ScrollProgress from '@/components/ScrollProgress';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
@@ -27,8 +26,7 @@ export default function Home() {
   }
 
   return (
-    <div className="landing-scope relative min-h-screen bg-background text-foreground overflow-x-clip">
-      {!reducedMotion && <CustomCursor />}
+    <div className="relative min-h-screen bg-background text-foreground overflow-x-clip">
       <Navbar 
         reducedMotion={reducedMotion} 
         onToggleMotion={toggleMotion} 
