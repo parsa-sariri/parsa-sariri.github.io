@@ -35,11 +35,6 @@
   * {
     @apply border-border;
     outline-color: hsl(var(--ring) / 0.5);
-    cursor: auto !important;
-  }
-
-  a, button, [role="button"], input, select, textarea {
-    cursor: pointer !important;
   }
 
   html {
@@ -52,6 +47,7 @@
     font-size: 1.125rem;
     line-height: 1.6;
     overflow-x: clip;
+    cursor: none;
   }
 
   html[lang="fa"] body,
