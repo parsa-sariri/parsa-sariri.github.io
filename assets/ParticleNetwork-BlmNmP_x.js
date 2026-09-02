@@ -1,4 +1,4 @@
-import{r as Ks,j as No}from"./index-CxhTs1LK.js";/**
+import{r as Ks,j as No}from"./index-1KO0c6OH.js";/**
  * @license
  * Copyright 2010-2024 Three.js Authors
  * SPDX-License-Identifier: MIT
