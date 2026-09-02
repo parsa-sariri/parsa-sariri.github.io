@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Network, Menu, X, Languages } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
-export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }) {
+export default function Navbar({ reducedMotion, onToggleMotion }) {
   const { t, lang, toggleLang } = useLanguage();
   const [scrolled,      setScrolled]      = useState(false);
   const [menuOpen,      setMenuOpen]      = useState(false);
   const [activeSection, setActiveSection] = useState('nexus');
+  const location = useLocation();
+
+  const isHomePage = location.pathname === '/';
 
   const navLinks = [
-    { label: t.nav.nexus,      href: '#nexus'      },
-    { label: t.nav.about,      href: '#about'      },
-    { label: t.nav.stack,      href: '#stack'      },
-    { label: t.nav.trajectory, href: '#trajectory' },
-    { label: t.nav.writeups,   href: '#writeups', isAction: true },
-    { label: t.nav.connect,    href: '#connect'    },
+    { label: t.nav.nexus,      href: isHomePage ? '#nexus' : '/#nexus'      },
+    { label: t.nav.about,      href: isHomePage ? '#about' : '/#about'      },
+    { label: t.nav.stack,      href: isHomePage ? '#stack' : '/#stack'      },
+    { label: t.nav.trajectory, href: isHomePage ? '#trajectory' : '/#trajectory' },
+    { label: t.nav.writeups,   href: '/writeups', isRoute: true },
+    { label: t.nav.connect,    href: isHomePage ? '#connect' : '/#connect'    },
   ];
 
   /* ── Scroll → glass effect ─────────────────────────────────────── */
@@ -62,22 +66,31 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            const isActive = link.href === `#${activeSection}`;
-            if (link.isAction) {
+            if (link.isRoute) {
+              const isRouteActive = location.pathname.startsWith(link.href);
               return (
-                <button
+                <Link
                   key={link.href}
-                  onClick={onOpenWriteups}
-                  className="px-4 py-2 text-xs font-heading font-semibold tracking-widest transition-colors relative group text-[hsl(var(--primary))] hover:text-white"
+                  to={link.href}
+                  className={`px-4 py-2 text-xs font-heading font-semibold tracking-widest transition-colors relative group ${
+                    isRouteActive
+                      ? 'text-[hsl(var(--primary))]'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
+                  }`}
                 >
                   <span className="flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--primary))] animate-pulse"></span>
                     {link.label}
                   </span>
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-[hsl(var(--primary))] w-0 group-hover:w-full transition-all duration-300" />
-                </button>
+                  <span
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-[hsl(var(--primary))] transition-all duration-300 ${
+                      isRouteActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
+                  />
+                </Link>
               );
             }
+            const isActive = isHomePage && link.href === `#${activeSection}`;
             return (
               <a
                 key={link.href}
@@ -127,20 +140,37 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
       {/* Mobile menu — animate-slide-down defined in index.css */}
       {menuOpen && (
         <div className="md:hidden glass-strong mt-3 mx-4 rounded-xl p-4 flex flex-col gap-2 animate-slide-down">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className={`px-4 py-3 text-sm font-heading font-semibold tracking-widest transition-colors ${
-                link.href === `#${activeSection}`
-                  ? 'text-[hsl(var(--primary))]'
-                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            if (link.isRoute) {
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="px-4 py-3 text-left text-sm font-heading font-semibold tracking-widest transition-colors text-[hsl(var(--primary))]"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[hsl(var(--primary))] animate-pulse"></span>
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`px-4 py-3 text-sm font-heading font-semibold tracking-widest transition-colors ${
+                  isHomePage && link.href === `#${activeSection}`
+                    ? 'text-[hsl(var(--primary))]'
+                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
           <div className="flex items-center gap-2 px-4 py-2">
             <button
               onClick={toggleLang}

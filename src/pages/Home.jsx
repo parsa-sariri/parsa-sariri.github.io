@@ -9,11 +9,9 @@ import Skills from '@/components/sections/Skills';
 import Trajectory from '@/components/sections/Trajectory';
 import Contact from '@/components/sections/Contact';
 import Footer from '@/components/sections/Footer';
-import WriteupsModal from '@/components/WriteupsModal';
 
 export default function Home() {
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [writeupsOpen, setWriteupsOpen] = useState(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -34,7 +32,6 @@ export default function Home() {
       <Navbar 
         reducedMotion={reducedMotion} 
         onToggleMotion={toggleMotion} 
-        onOpenWriteups={() => setWriteupsOpen(true)}
       />
       <ScrollProgress />
 
@@ -48,11 +45,6 @@ export default function Home() {
       </main>
 
       <Footer />
-
-      <WriteupsModal 
-        isOpen={writeupsOpen} 
-        onClose={() => setWriteupsOpen(false)} 
-      />
     </div>
   );
 }
