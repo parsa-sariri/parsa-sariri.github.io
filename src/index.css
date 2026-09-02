@@ -47,7 +47,14 @@
     font-size: 1.125rem;
     line-height: 1.6;
     overflow-x: clip;
-    cursor: default;
+  }
+
+  /* Custom cursor only on fine pointers inside Landing page */
+  @media (pointer: fine) {
+    .landing-scope,
+    .landing-scope * {
+      cursor: none !important;
+    }
   }
 
   html[lang="fa"] body,

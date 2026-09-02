@@ -27,7 +27,8 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-x-clip">
+    <div className="landing-scope relative min-h-screen bg-background text-foreground overflow-x-clip">
+      {!reducedMotion && <CustomCursor />}
       <Navbar 
         reducedMotion={reducedMotion} 
         onToggleMotion={toggleMotion} 

@@ -4,7 +4,6 @@ import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import ScrollToTop from './components/ScrollToTop';
-import CustomCursor from './components/CustomCursor';
 import Home from '@/pages/Home';
 import WriteupsPage from '@/pages/WriteupsPage';
 import SingleWriteupPage from '@/pages/SingleWriteupPage';
@@ -15,7 +14,6 @@ function App() {
     <LanguageProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <CustomCursor />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />

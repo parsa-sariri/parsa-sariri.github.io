@@ -1,97 +1,96 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [isPointer, setIsPointer] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const rafRef = useRef(null);
-  const targetRef = useRef({ x: -100, y: -100 });
-  const isPointerRef = useRef(false);
+  const cursorRef = useRef(null);
+  const glowRef = useRef(null);
 
   useEffect(() => {
+    // Only on fine pointers (desktop mouse) and when motion is not reduced
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (isTouchDevice || prefersReduced) return;
 
+    let mouseX = -100;
+    let mouseY = -100;
+    let cursorX = -100;
+    let cursorY = -100;
+    let isVisible = false;
+    let isPointer = false;
+    let rafId = null;
+
     function onMouseMove(e) {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!isVisible && cursorRef.current) {
+        isVisible = true;
+        cursorRef.current.style.opacity = '1';
+      }
 
       const el = document.elementFromPoint(e.clientX, e.clientY);
       const interactive = !!el?.closest('a, button, [role="button"], input, textarea, select, [data-cursor="pointer"]');
-      if (isPointerRef.current !== interactive) {
-        isPointerRef.current = interactive;
-        setIsPointer(interactive);
+      if (interactive !== isPointer) {
+        isPointer = interactive;
+        if (glowRef.current) {
+          if (isPointer) {
+            glowRef.current.className = 'w-9 h-9 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[hsl(var(--accent))] bg-[hsl(var(--accent)/0.15)] shadow-[0_0_20px_hsl(var(--accent)/0.6)] transition-all duration-150 ease-out';
+          } else {
+            glowRef.current.className = 'w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.15)] shadow-[0_0_12px_hsl(var(--primary)/0.5)] transition-all duration-150 ease-out';
+          }
+        }
       }
     }
 
     function onMouseLeave() {
-      setIsVisible(false);
+      isVisible = false;
+      if (cursorRef.current) cursorRef.current.style.opacity = '0';
     }
 
     function onMouseEnter() {
-      setIsVisible(true);
+      isVisible = true;
+      if (cursorRef.current) cursorRef.current.style.opacity = '1';
     }
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
     document.addEventListener('mouseenter', onMouseEnter);
 
-    function loop() {
-      setPosition((prev) => {
-        const dx = targetRef.current.x - prev.x;
-        const dy = targetRef.current.y - prev.y;
-        return {
-          x: prev.x + dx * 0.35,
-          y: prev.y + dy * 0.35,
-        };
-      });
-      rafRef.current = requestAnimationFrame(loop);
+    function renderLoop() {
+      // High-performance spring interpolation
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      cursorX += dx * 0.35;
+      cursorY += dy * 0.35;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+      }
+
+      rafId = requestAnimationFrame(renderLoop);
     }
-    rafRef.current = requestAnimationFrame(loop);
+    rafId = requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseleave', onMouseLeave);
       document.removeEventListener('mouseenter', onMouseEnter);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  if (!isVisible) return null;
-
   return (
-    <>
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform opacity-0 transition-opacity duration-200"
+      style={{ transform: 'translate3d(-100px, -100px, 0)' }}
+    >
       {/* Outer Halo Follower */}
       <div
-        className="fixed pointer-events-none z-[99999] will-change-transform"
-        style={{
-          left: 0,
-          top: 0,
-          transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`,
-          transition: 'width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background-color 0.2s ease',
-        }}
-      >
-        <div
-          className={`rounded-full transition-all duration-150 ${
-            isPointer
-              ? 'w-9 h-9 border-2 border-[hsl(var(--accent))] bg-[hsl(var(--accent)/0.15)] shadow-[0_0_20px_hsl(var(--accent)/0.6)]'
-              : 'w-5 h-5 border border-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.15)] shadow-[0_0_12px_hsl(var(--primary)/0.5)]'
-          }`}
-        />
-      </div>
-
-      {/* Immediate Sharp Center Dot */}
-      <div
-        className="fixed pointer-events-none z-[99998] will-change-transform"
-        style={{
-          left: 0,
-          top: 0,
-          transform: `translate3d(${targetRef.current.x}px, ${targetRef.current.y}px, 0) translate(-50%, -50%)`,
-        }}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--primary))] shadow-[0_0_6px_#fff]" />
-      </div>
-    </>
+        ref={glowRef}
+        className="w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.15)] shadow-[0_0_12px_hsl(var(--primary)/0.5)] transition-all duration-150 ease-out"
+      />
+      {/* Center Sharp Dot */}
+      <div className="absolute top-0 left-0 w-1.5 h-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[hsl(var(--primary))] shadow-[0_0_6px_#fff]" />
+    </div>
   );
 }
