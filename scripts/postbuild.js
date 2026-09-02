@@ -8,7 +8,8 @@ const distDir = path.resolve(__dirname, '..', 'dist');
 
 // Copy index.html to 404.html for SPA fallback
 fs.copyFileSync(path.join(distDir, 'index.html'), path.join(distDir, '404.html'));
-console.log('✅ Generated 404.html for GitHub Pages SPA routing fallback.');
+fs.writeFileSync(path.join(distDir, '.nojekyll'), '');
+console.log('✅ Generated 404.html & .nojekyll for GitHub Pages.');
 
 // Prerender directory structure for direct route requests
 const routes = [

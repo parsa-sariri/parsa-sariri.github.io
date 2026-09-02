@@ -17,7 +17,7 @@ export default function CustomCursor() {
       if (!isVisible) setIsVisible(true);
 
       const el = document.elementFromPoint(e.clientX, e.clientY);
-      const interactive = el?.closest('a, button, [role="button"], input, textarea, [data-cursor="pointer"]');
+      const interactive = el?.closest('a, button, [role="button"], input, textarea, code, pre, [data-cursor="pointer"]');
       setIsPointer(!!interactive);
     }
 
