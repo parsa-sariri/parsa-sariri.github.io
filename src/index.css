@@ -47,7 +47,7 @@
     font-size: 1.125rem;
     line-height: 1.6;
     overflow-x: clip;
-    cursor: none;
+    cursor: default;
   }
 
   html[lang="fa"] body,
