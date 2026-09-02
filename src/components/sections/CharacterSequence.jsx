@@ -41,7 +41,7 @@ export default function CharacterSequence() {
   const frames = useMemo(
     () =>
       Array.from({ length: FRAME_COUNT }, (_, i) =>
-        `${FRAME_PREFIX}${String(i).padStart(3, '0')}-jukebox-bg-removed.png`,
+        `${FRAME_PREFIX}${String(i).padStart(3, '0')}-jukebox-bg-removed.webp`,
       ),
     [],
   );

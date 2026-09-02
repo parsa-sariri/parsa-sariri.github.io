@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, Network } from 'lucide-react';
+import { Linkedin, Mail, Network, Github } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Footer() {
@@ -32,7 +32,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/parsa-sariri"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 glass rounded-lg flex items-center justify-center text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-all hover:scale-110"
@@ -41,7 +41,7 @@ export default function Footer() {
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/parsa-sariri-ajili"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 glass rounded-lg flex items-center justify-center text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-all hover:scale-110"

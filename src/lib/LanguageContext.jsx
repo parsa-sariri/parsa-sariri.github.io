@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const translations = {
   en: {
     nav: {
-      nexus: 'NEXUS', about: 'ABOUT', stack: 'STACK', trajectory: 'TRAJECTORY', connect: 'CONNECT',
+      nexus: 'NEXUS', about: 'ABOUT', stack: 'STACK', trajectory: 'TRAJECTORY', writeups: 'WRITEUPS', connect: 'CONNECT',
       motionOn: 'MOTION: ON', motionOff: 'MOTION: OFF',
     },
     about: {
@@ -76,7 +76,7 @@ const translations = {
   },
   fa: {
     nav: {
-      nexus: 'هسته', about: 'درباره', stack: 'مهارت‌ها', trajectory: 'مسیر', connect: 'ارتباط',
+      nexus: 'هسته', about: 'درباره', stack: 'مهارت‌ها', trajectory: 'مسیر', writeups: 'گزارش‌های فنی', connect: 'ارتباط',
       motionOn: 'حرکت: روشن', motionOff: 'حرکت: خاموش',
     },
     about: {
@@ -151,13 +151,19 @@ const translations = {
 
 const LanguageContext = createContext();
 
+const LANG_STORAGE_KEY = 'parsa_lang';
+
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState(() => {
+    const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
+    return stored === 'fa' ? 'fa' : 'en';
+  });
   const isRTL = lang === 'fa';
 
   useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    window.localStorage.setItem(LANG_STORAGE_KEY, lang);
   }, [lang, isRTL]);
 
   const toggleLang = () => setLang((l) => (l === 'en' ? 'fa' : 'en'));

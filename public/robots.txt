@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parsa-sariri.github.io/sitemap.xml

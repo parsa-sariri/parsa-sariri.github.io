@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Server, ChevronRight, X, Cpu, Network, Terminal, Boxes, Monitor, HardDrive } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -20,6 +20,14 @@ export default function Skills() {
   const { t } = useLanguage();
   const [selected, setSelected] = useState(null);
   const selectedInfo = selected ? t.certs[selected.nameKey] : null;
+
+  // Close modal on ESC key
+  useEffect(() => {
+    if (!selected) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setSelected(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selected]);
 
   return (
     <section id="stack" className="relative py-24 px-6 overflow-hidden">
@@ -99,6 +107,9 @@ export default function Skills() {
 
       {selected && selectedInfo && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedInfo.name}
           className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-background/80 backdrop-blur-sm"
           onClick={() => setSelected(null)}
         >
@@ -133,7 +144,7 @@ export default function Skills() {
                 {t.skills.masteryPoints}
               </p>
               {selectedInfo.mastery.map((point, i) => (
-                <div key={i} className="flex items-center gap-3 p-2 rounded-md bg-[hsl(var(--secondary)/0.5)]">
+                <div key={point} className="flex items-center gap-3 p-2 rounded-md bg-[hsl(var(--secondary)/0.5)]">
                   <span className="font-heading text-xs text-[hsl(var(--primary))]">
                     {String(i + 1).padStart(2, '0')}
                   </span>

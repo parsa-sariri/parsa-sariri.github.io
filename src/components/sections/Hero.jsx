@@ -1,7 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { ChevronDown, Terminal, Shield, Radio } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import ParticleNetwork from '@/components/three/ParticleNetwork';
+
+// Load the Three.js particle network on demand — it's the heaviest module
+// (~500KB) and only needed in the hero, so the initial page loads faster.
+const ParticleNetwork = lazy(() => import('@/components/three/ParticleNetwork'));
 
 export default function Hero({ reducedMotion }) {
   const { t, lang } = useLanguage();
@@ -12,10 +15,9 @@ export default function Hero({ reducedMotion }) {
     if (!el || reducedMotion) return;
     function onScroll() {
       const scrollY = window.scrollY;
-      if (scrollY < window.innerHeight) {
-        el.style.transform = `translateZ(${scrollY * 0.3}px) scale(${1 - scrollY * 0.0005})`;
-        el.style.opacity = String(Math.max(0, 1 - scrollY / (window.innerHeight * 0.7)));
-      }
+      const pct = Math.min(scrollY / window.innerHeight, 1);
+      el.style.transform = `translateY(${-scrollY * 0.15}px) scale(${1 - pct * 0.05})`;
+      el.style.opacity = String(Math.max(0, 1 - pct / 0.7));
     }
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -27,7 +29,9 @@ export default function Hero({ reducedMotion }) {
   return (
     <section id="nexus" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0">
-        <ParticleNetwork reducedMotion={reducedMotion} />
+        <Suspense fallback={<div className="absolute inset-0 grid-bg opacity-30" />}>
+          <ParticleNetwork reducedMotion={reducedMotion} />
+        </Suspense>
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background pointer-events-none" />
@@ -48,9 +52,9 @@ export default function Hero({ reducedMotion }) {
         <h1 className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-gradient-cobalt text-glow leading-none mb-4">
           {name1}
         </h1>
-        <h1 className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-[hsl(var(--foreground))] leading-none mb-2">
+        <p className="font-heading font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight text-[hsl(var(--foreground))] leading-none mb-2">
           {name2}
-        </h1>
+        </p>
 
         <p className="font-body text-base sm:text-lg text-[hsl(var(--muted-foreground))] mt-6 max-w-xl mx-auto">
           {t.hero.tagline}
