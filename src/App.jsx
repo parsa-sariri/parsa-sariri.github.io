@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import ScrollToTop from './components/ScrollToTop';
 import Home from '@/pages/Home';
-import WriteupsPage from '@/pages/WriteupsPage';
-import SingleWriteupPage from '@/pages/SingleWriteupPage';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
 function App() {
@@ -17,8 +15,6 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/writeups" element={<WriteupsPage />} />
-            <Route path="/writeups/:slug" element={<SingleWriteupPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Toaster />

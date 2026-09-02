@@ -32,13 +32,23 @@
 }
 
 @layer base {
-  * {
+  *, *::before, *::after {
     @apply border-border;
     outline-color: hsl(var(--ring) / 0.5);
+    cursor: auto !important;
+  }
+
+  a, button, [role="button"], input, select, textarea, [data-cursor="pointer"] {
+    cursor: pointer !important;
+  }
+
+  p, span, h1, h2, h3, h4, h5, h6, code, pre, li, td, th {
+    cursor: text !important;
   }
 
   html {
     scroll-behavior: smooth;
+    cursor: auto !important;
   }
 
   body {
@@ -47,6 +57,7 @@
     font-size: 1.125rem;
     line-height: 1.6;
     overflow-x: clip;
+    cursor: auto !important;
   }
 
   html[lang="fa"] body,
