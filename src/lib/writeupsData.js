@@ -27,7 +27,7 @@ export const CREDENTIALS = [
 export const MS_APPLIED_SKILLS = {
   code: 'APL-5004',
   verifyId: 'EB4EF3E17238EF07',
-  verifyUrl: 'https://learn.microsoft.com/en-us/users/parsa-sariri/credentials/EB4EF3E17238EF07',
+  verifyUrl: 'https://learn.microsoft.com/en-us/users/parsasaririajili/credentials/eb4ef3e17238ef07',
 };
 
 /* ── Static, non-translated facts (dates, tool names, tags, slugs) ─────── */
