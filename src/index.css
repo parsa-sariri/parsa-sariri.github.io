@@ -271,3 +271,12 @@ body.reduced-motion * {
   animation: none !important;
   transition: none !important;
 }
+
+/* ── Custom cursor state ── */
+html.cc-active,
+html.cc-active body,
+html.cc-active *,
+html.cc-active *::before,
+html.cc-active *::after {
+  cursor: none !important;
+}

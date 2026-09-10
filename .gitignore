@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local notes and archives
+PORTFOLIO_UPDATE_ASTRA.md
+portfolio_master_loop.md
+*.zip
+

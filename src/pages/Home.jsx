@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import CustomCursor from '@/components/CustomCursor';
 import ScrollProgress from '@/components/ScrollProgress';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import CharacterSequence from '@/components/sections/CharacterSequence';
 import Skills from '@/components/sections/Skills';
 import Trajectory from '@/components/sections/Trajectory';
+import Writeups from '@/components/sections/Writeups';
 import Contact from '@/components/sections/Contact';
 import Footer from '@/components/sections/Footer';
-import WriteupsModal from '@/components/WriteupsModal';
 
 export default function Home() {
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [writeupsOpen, setWriteupsOpen] = useState(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -33,7 +31,6 @@ export default function Home() {
       <Navbar 
         reducedMotion={reducedMotion} 
         onToggleMotion={toggleMotion} 
-        onOpenWriteups={() => setWriteupsOpen(true)}
       />
       <ScrollProgress />
 
@@ -43,15 +40,11 @@ export default function Home() {
         <CharacterSequence />
         <Skills />
         <Trajectory />
+        <Writeups />
         <Contact />
       </main>
 
       <Footer />
-
-      <WriteupsModal 
-        isOpen={writeupsOpen} 
-        onClose={() => setWriteupsOpen(false)} 
-      />
     </div>
   );
 }

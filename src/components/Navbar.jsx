@@ -1,20 +1,26 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Network, Menu, X, Languages } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 
-export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }) {
+export default function Navbar({ reducedMotion, onToggleMotion }) {
   const { t, lang, toggleLang } = useLanguage();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
   const [scrolled,      setScrolled]      = useState(false);
   const [menuOpen,      setMenuOpen]      = useState(false);
   const [activeSection, setActiveSection] = useState('nexus');
 
+  /* Hash-section links resolve to "/#id" so they work from any route —
+     ScrollToTop already handles the post-navigation scroll-into-view.
+     WRITEUPS is a real page, not a homepage section. */
   const navLinks = [
-    { label: t.nav.nexus,      href: '#nexus'      },
-    { label: t.nav.about,      href: '#about'      },
-    { label: t.nav.stack,      href: '#stack'      },
-    { label: t.nav.trajectory, href: '#trajectory' },
-    { label: t.nav.writeups,   href: '#writeups', isAction: true },
-    { label: t.nav.connect,    href: '#connect'    },
+    { label: t.nav.nexus,      id: 'nexus',      to: '/#nexus'      },
+    { label: t.nav.about,      id: 'about',      to: '/#about'      },
+    { label: t.nav.stack,      id: 'stack',      to: '/#stack'      },
+    { label: t.nav.trajectory, id: 'trajectory', to: '/#trajectory' },
+    { label: t.nav.writeups,   id: 'writeups',   to: '/writeups'    },
+    { label: t.nav.connect,    id: 'connect',    to: '/#connect'    },
   ];
 
   /* ── Scroll → glass effect ─────────────────────────────────────── */
@@ -24,8 +30,9 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ── Active section detection ──────────────────────────────────── */
+  /* ── Active section detection (homepage sections only) ──────────── */
   useEffect(() => {
+    if (!isHome) return undefined;
     const ids = ['nexus', 'about', 'stack', 'trajectory', 'connect'];
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
@@ -38,7 +45,12 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
       return obs;
     });
     return () => observers.forEach((o) => o?.disconnect());
-  }, []);
+  }, [isHome]);
+
+  function isLinkActive(id) {
+    if (id === 'writeups') return location.pathname.startsWith('/writeups');
+    return isHome && id === activeSection;
+  }
 
   return (
     <nav
@@ -47,7 +59,7 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#nexus" className="flex items-center gap-2 group">
+        <Link to="/#nexus" className="flex items-center gap-2 group">
           <div className="relative">
             <Network className="w-6 h-6 text-[hsl(var(--primary))] transition-transform group-hover:rotate-12" />
             <div className="absolute inset-0 blur-md text-[hsl(var(--primary))] opacity-50">
@@ -57,31 +69,16 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
           <span className="font-heading font-bold text-sm tracking-widest text-[hsl(var(--foreground))]">
             PARSA<span className="text-[hsl(var(--primary))]">.</span>SARIRI
           </span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            const isActive = link.href === `#${activeSection}`;
-            if (link.isAction) {
-              return (
-                <button
-                  key={link.href}
-                  onClick={onOpenWriteups}
-                  className="px-4 py-2 text-xs font-heading font-semibold tracking-widest transition-colors relative group text-[hsl(var(--primary))] hover:text-white"
-                >
-                  <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--primary))] animate-pulse"></span>
-                    {link.label}
-                  </span>
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-[hsl(var(--primary))] w-0 group-hover:w-full transition-all duration-300" />
-                </button>
-              );
-            }
+            const isActive = isLinkActive(link.id);
             return (
-              <a
-                key={link.href}
-                href={link.href}
+              <Link
+                key={link.id}
+                to={link.to}
                 className={`px-4 py-2 text-xs font-heading font-semibold tracking-widest transition-colors relative group ${
                   isActive
                     ? 'text-[hsl(var(--primary))]'
@@ -94,7 +91,7 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}
                 />
-              </a>
+              </Link>
             );
           })}
           <button
@@ -128,18 +125,18 @@ export default function Navbar({ reducedMotion, onToggleMotion, onOpenWriteups }
       {menuOpen && (
         <div className="md:hidden glass-strong mt-3 mx-4 rounded-xl p-4 flex flex-col gap-2 animate-slide-down">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <Link
+              key={link.id}
+              to={link.to}
               onClick={() => setMenuOpen(false)}
               className={`px-4 py-3 text-sm font-heading font-semibold tracking-widest transition-colors ${
-                link.href === `#${activeSection}`
+                isLinkActive(link.id)
                   ? 'text-[hsl(var(--primary))]'
                   : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]'
               }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
           <div className="flex items-center gap-2 px-4 py-2">
             <button
