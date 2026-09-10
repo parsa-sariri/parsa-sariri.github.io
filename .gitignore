@@ -27,4 +27,5 @@ dist-ssr
 PORTFOLIO_UPDATE_ASTRA.md
 portfolio_master_loop.md
 *.zip
+.vite
 
